@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 
 const db = require('../data/helpers/actionModel');
+const dbProjects = require('../data/helpers/projectModel');
+
 
 module.exports = router;
 
@@ -19,7 +21,7 @@ router.get('/', (req, res) => {
 
 // insert a new action and associate to project id
 
-router.post('/:id', validateProjectId, (req, res) => {
+router.post('/:id', validateProjectId, validateAction, (req, res) => {
     const { id } = req.params
     const action = req.body
     action.project_id = id
@@ -72,12 +74,12 @@ router.delete('/:id', (req, res) => {
 function validateProjectId (req, res, next) {
     let id = req.params.id
     console.log(id)
-    let post = {}
-    db.get(id)
+
+    dbProjects.get(id)
         .then(result => {
             if (result) {
-                post = req.post;
-                console.log('project validated')
+                console.log('post id validated')
+                next()
             } else {
                 res.status(404).json({ message: "invalid project id" })
             }
@@ -86,6 +88,27 @@ function validateProjectId (req, res, next) {
             res.status(500).json({error: 'error accessing specified project in database'})
         })
     
+}
 
-    next()
+function validateAction (req, res, next) {
+    const newAction = req.body
+    console.log(newAction.description.split('').length)
+    const descriptionLength = newAction.description.split('').length
+    
+
+    if (descriptionLength > 128) {
+       
+        res.status(404).json({message: 'description cannot exceed 128 characters'})
+    }
+    else if (newAction.notes && newAction.description) {
+
+        console.log('newAction validated')
+
+        next()
+
+    } else { 
+        res.status(404).json({ message: 'notes and description are required fields'})
+
+    }
+    
 }
