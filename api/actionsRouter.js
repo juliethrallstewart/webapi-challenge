@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 
 // insert a new action and associate to project id
 
-router.post('/:id', (req, res) => {
+router.post('/:id', validateProjectId, (req, res) => {
     const { id } = req.params
     const action = req.body
     action.project_id = id
@@ -66,3 +66,26 @@ router.delete('/:id', (req, res) => {
             res.status(500).json({error: 'error removing project from database'})
         })
 });
+
+// local middleware
+
+function validateProjectId (req, res, next) {
+    let id = req.params.id
+    console.log(id)
+    let post = {}
+    db.get(id)
+        .then(result => {
+            if (result) {
+                post = req.post;
+                console.log('project validated')
+            } else {
+                res.status(404).json({ message: "invalid project id" })
+            }
+        })
+        .catch(e => {
+            res.status(500).json({error: 'error accessing specified project in database'})
+        })
+    
+
+    next()
+}
