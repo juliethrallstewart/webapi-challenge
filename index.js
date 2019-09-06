@@ -13,24 +13,13 @@ I need this code, just don't know where, perhaps should make some middleware, do
 Go code!
 */
 
-const express = require('express');
-const server = express();
+// const express = require('express');
+const server = require('./api/server.js');
 
 const port = 4000;
 
-server.get('/', (req, res) => {
-    res.send('\API running\n')
-})
-
 server.listen(port, () => {
-    console.log(`\nAPI on ${port}\n`)
-})
+    console.log(`\n*** Server Running on http://localhost:${port} ***\n`);
+  });
 
-//routes
-
-
-
-
-//global middleware
-server.use(express.json())
 

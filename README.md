@@ -26,13 +26,20 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+Middleware & Express Router
+
 - [ ] Describe Middleware?
 
+Middleware are functions that control how the data in the database is interacted with, authorized & tested. Middleware is also used in higher order components like express router and to perform tasks like logging CRUD requests.
+
 - [ ] Describe a Resource?
+Resources are the various types of data contained in your applications database, such as in todays project which contained actions data & projects data.  Resources are often partioned into different folders for easier database management. 
 
 - [ ] What can the API return to help clients know if a request was successful?
+HTTP response status codes, such as 200 if they are getting, updating or deleting or 201 if they are creating.
 
 - [ ] How can we partition our application into sub-applications?
+By dividing the data up by type into its own modules and using express routing to interact with each module as if it is it's own isolated database.
 
 ## Project Setup
 
