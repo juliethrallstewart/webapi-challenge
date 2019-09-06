@@ -36,7 +36,7 @@ router.get('/:id/actions', (req, res) => {
 
 // insert a new project
 
-router.post('/', (req, res) => {
+router.post('/', validateProject, (req, res) => {
     const newProject = req.body
 
     db.insert(newProject)
@@ -84,3 +84,26 @@ router.delete('/:id', (req, res) => {
         })
 });
 
+// local middleware 
+function isEmpty(obj) {
+    for(let key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
+function validateProject (req, res, next) {
+    const newProject = req.body
+
+    if (newProject.name && newProject.description) {
+        next()
+    }
+
+    isEmpty(newProject) ? res.status(400).json({ message: "missing project data" }) : 
+    !newProject.name ? res.status(400).json({ message: "missing required name field" }) :
+    !newProject.description ? res.status(400).json({ message: "missing required description field" }) :
+    console.log('post validated')
+
+    
+}
